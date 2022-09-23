@@ -108,6 +108,11 @@ console.log(sum3);
 // 10
 
 
+// ---------------------------------------------------- //
+
+// Reduce can also be used in many other useful ways,
+// such as grouping objects by a specific property, flattening arrays, 
+// or counting how many times a value appears in an object or array.
 
 const teamMembers = [
   {
@@ -134,5 +139,62 @@ const teamMembers = [
 
 // Totaling a specific object property
 
+// We’ve got an array of team members where each team member
+// is an object containing their name, profession and years of experience. 
+// Our goal is to total all the experience the team has as a whole.
+
+let totalExperience = teamMembers.reduce((acc, curr) => acc + curr.yrsExperience, 0);
+console.log(totalExperience);
+
+// ^^ without specifiying the intial value, it would log
+// [object Object]713
+// the accumulator starts with the first array element, which is an object
+// then js tries to add curr.yrsExperience to this object
+// which is not what we wanted
+
 
 // Grouping by a property, and totaling it too
+
+// use reduce to group our team members by profession and find  
+// the total experience for each profession
+// the type of result we want back (integer, object, array etc) will determind
+// the intial value we begin with
+// in this case, an emtpy object is good {}
+
+// I’m using the longer arrow function form here which includes curly braces 
+// since this function will be a few lines of code and will need a return statement. 
+// Just to be crystal clear, this first set of curly braces is the boundaries of 
+// the callback function, and the second set after the comma is our initial 
+// value, an empty object. This is what the accumulator will be on the first pass. 
+
+// before filling out the curly braces, the accumulator is an empty object and 
+// curr is the first team member in the array
+
+// So, if I want to create a  property in my object for Developer, I need to get  
+// curr.profession. 
+// I’ll call this variable key. 
+// Now, I need to check whether the key already exists in the object we’re 
+// going to be accumulating into. If it doesn’t yet exist, I’ll set it equal to  
+// curr.yrsExperience. 
+// This means the first time we see a new profession, that property will  
+// be added into the accumulator and its value will be set to the team member’s 
+// experience.  
+// Otherwise, if the key does already exist, it’s as simple as adding the current 
+// member’s experience to the already existing value. 
+// When I’m done, all I’ve got to do is return the accumulator.
+
+let experienceByProfession = teamMembers.reduce((acc, curr) => {
+  let key = curr.profession;
+  if (!acc[key]) {
+    acc[key] = curr.yrsExperience;
+  } else {
+    acc[key] += curr.yrsExperience;
+  }
+  return acc
+}, {});
+console.log(experienceByProfession)
+
+// if i added another team member with a different profession to the original
+// array, when the code is run the result would already have a new category  
+// with the relevant years of experience
+
